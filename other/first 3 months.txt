@@ -1,0 +1,16 @@
+month 1
+IJR - 20%
+DBC - 20%
+SHY - 60%
+
+month 2
+VAW - 20%
+DBC - 20%
+SHY - 60%
+
+month 3
+EFA - 20%
+EEM - 20%
+VAW - 20%
+AGG - 20%
+TIP - 20%
