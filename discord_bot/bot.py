@@ -67,6 +67,8 @@ def process_args(args, interval="1d"):
             continue
         if "assets" in keyword.lower():
             assets = arg.split(",")
+        elif "risk_free" in keyword.lower():
+            risk_free = arg.split(",")
         elif "start_date" in keyword.lower():
             start_date = make_date(arg)
         elif "end_date" in keyword.lower():
@@ -91,14 +93,14 @@ def process_args(args, interval="1d"):
         elif "verbose" in keyword.lower():
             verbose = bool(arg)
 
-    return assets, drop_unmatched_corr, save_results, periods, end_date, start_date, atr_multiplier, selection_size, period, window, momentum_weight, volatility_weight, correlation_weight, atr_weight, verbose
+    return assets, risk_free, drop_unmatched_corr, save_results, periods, end_date, start_date, atr_multiplier, selection_size, period, window, momentum_weight, volatility_weight, correlation_weight, atr_weight, verbose
 
 
 @bot.command(name='run-raam', help='Returns the results on running RAAM with the top 10 nasdaq stocks. Allocations are determined from four months of historical data.')
 async def get_results(ctx, *args):
 
     # Process arguments and send status message
-    assets, drop_unmatched_corr, save_results, periods, end_date, start_date, atr_multiplier, selection_size, period, window, momentum_weight, volatility_weight, correlation_weight, atr_weight, verbose = process_args(
+    assets, risk_free, drop_unmatched_corr, save_results, periods, end_date, start_date, atr_multiplier, selection_size, period, window, momentum_weight, volatility_weight, correlation_weight, atr_weight, verbose = process_args(
         args)
     await ctx.send("Fetching RAAM results for %s on %s through %s for periods of %s business days" % (str(assets), str(start_date), str(end_date), str(periods)))
 
@@ -119,12 +121,12 @@ async def get_results(ctx, *args):
 async def backtest_bot(ctx, *args):
 
     # Process arguments
-    assets, drop_unmatched_corr, save_results, periods, end_date, start_date, atr_multiplier, selection_size, period, window, momentum_weight, volatility_weight, correlation_weight, atr_weight, verbose = process_args(
+    assets, risk_free, drop_unmatched_corr, save_results, periods, end_date, start_date, atr_multiplier, selection_size, period, window, momentum_weight, volatility_weight, correlation_weight, atr_weight, verbose = process_args(
         args)
 
     # Run backtesting process, print status messages
     await ctx.send("Backtesting for %s, over range %s to %s, please be patient and await results." % (str(assets), str(start_date), str(end_date)))
-    money, selection, price_points = await backtest(assets, periods=periods, period=period, window=window, start_date=start_date, end_date=end_date, selection_size=selection_size, interval="1d", ctx=ctx, momentum_weight=momentum_weight, volatility_weight=volatility_weight, correlation_weight=correlation_weight, atr_weight=atr_weight, verbose=verbose)
+    money, selection, price_points = await backtest(assets, risk_free=risk_free, periods=periods, period=period, window=window, start_date=start_date, end_date=end_date, selection_size=selection_size, interval="1d", ctx=ctx, momentum_weight=momentum_weight, volatility_weight=volatility_weight, correlation_weight=correlation_weight, atr_weight=atr_weight, verbose=verbose)
     await ctx.send("Backtesting complete")
 
     # Print output

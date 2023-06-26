@@ -10,7 +10,7 @@ from calculations import *
 def get_selection_symbols(selection, selection_size):
     return selection[selection["Rank"] <= selection_size]["Symbol"].values
 
-async def backtest(assets, periods=84, period=4, window=16, start_date = None, end_date = None, selection_size = 5, interval = "1d", ctx = None,  momentum_weight = MOMENTUM_WEIGHT, volatility_weight = VOLATILITY_WEIGHT, correlation_weight = CORRELATION_WEIGHT, atr_weight = ATR_WEIGHT, verbose = False):
+async def backtest(assets, risk_free=["SHY"], periods=84, period=4, window=16, start_date = None, end_date = None, selection_size = 5, interval = "1d", ctx = None,  momentum_weight = MOMENTUM_WEIGHT, volatility_weight = VOLATILITY_WEIGHT, correlation_weight = CORRELATION_WEIGHT, atr_weight = ATR_WEIGHT, verbose = False):
 
     start_date, end_date = default_start_end(start_date, end_date, interval)
 
@@ -28,9 +28,11 @@ async def backtest(assets, periods=84, period=4, window=16, start_date = None, e
         #Select just the tickers
         selection = get_selection_symbols(selection, selection_size).tolist()
 
-        #Add SHY to fill in allocations when not enough stocks have positive momentum
-        for _ in range(selection_size - len(selection)):
-            selection.append("SHY")
+        #Add risk free assets to fill in allocations when not enough stocks have positive momentum
+        counter_risk_free = 0
+        for i in range(selection_size - len(selection)):
+            selection.append(risk_free[counter_risk_free])
+            counter_risk_free = (counter_risk_free + 1) % len(risk_free)
 
         #Print final selection if verbose
         if verbose:
@@ -47,9 +49,19 @@ async def backtest(assets, periods=84, period=4, window=16, start_date = None, e
 
         #Buy stocks loop
         price_results = []
+        counter_risk_free = 0
         for asset in selection:
             asset_ticker = Ticker(asset)
-            prices = close_prices(asset_ticker, start_date=start_date_test, end_date=end_date_test, interval="1d").dropna()
+            prices = close_prices(asset_ticker, start_date=start_date_test, end_date=end_date_test, interval="1d")
+            #add a risk free asset if no data is available
+            if prices is None:
+                asset_ticker = Ticker(risk_free[counter_risk_free])
+                prices = close_prices(asset_ticker, start_date=start_date_test, end_date=end_date_test, interval="1d")
+                selection.remove(asset)
+                selection.append(risk_free[counter_risk_free])
+                counter_risk_free = (counter_risk_free + 1) % len(risk_free)
+            
+            prices = prices.dropna()
 
             # calculate money made / lost, save to list
             shares_start = (money / len(selection)) / prices.iloc[0]["open"] 
