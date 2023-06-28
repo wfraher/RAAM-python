@@ -41,6 +41,7 @@ def process_args(args, interval="1d"):
     # Default paramseters
     assets = ["AAPL", "GOOG", "AMZN", "TSLA", "META",
               "NVDA", "PEP", "COST", "GOOGL", "AVGO"]
+    risk_free = ["SHY"]
     drop_unmatched_corr = True
     save_results = True
     periods = 84
