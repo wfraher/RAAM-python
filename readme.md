@@ -134,6 +134,16 @@ steps to contribute!
 4. Push to the Branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+Be sure you are using the pattern [type of change]/[description of change]
+accepted types of change include:
+- feature
+- bugfix
+- hotfix
+
+Examples of branch names include:
+- feature/add-new-commandline-args
+- bugfix/could-not-load-cvs-files
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
