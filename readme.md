@@ -15,7 +15,7 @@
 <h3 align="center">RAAM</h3>
 
   <p align="center">
-    A small project to explore ranked asset allocation models
+    A small project to implement Giordano's Ranked Asset Allocation Model and compare it against other portfolio allocation methods.
     <!--
     <br />
     <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
@@ -59,7 +59,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-The goal of this project is to explore automated methods for evaluating and eventually automated management of stocks, Whatever that may entail.
+The goal of this project is to explore automated methods for allocating a stock/ETF/crypto portfolio, starting with implementing [Giordano's 2018 Ranked Asset Allocation Model](https://tanassociation.org/wp-content/uploads/2018/05/2018_dowaward-giordano.pdf)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -70,7 +70,9 @@ The goal of this project is to explore automated methods for evaluating and even
 **Will be fleshed out over time as project grows**
 ### Prerequisites
 
- - Python3.6
+ - Python 3.8.5
+ - yahooquery 2.2.15
+ - pandas 1.3.3
 
 ### Installation
 **This is an example, this is now how to run our project. This needs updated as we flesh the project out.**
@@ -99,8 +101,11 @@ The main usage for now is interaction through discord via bot commands, but this
 project can be run directly on your local machine. Our goal is to create multiple
 interaction avenues eventually via: commandline, discord bot, and a web interface.
 
-* Note, Will please update here with instructions for running locally.
+Currently, you can launch the bot by navigating to the discord_bot and running bot.py. When connected to the server you can run:
+`!run-raam` to see how RAAM allocates the current top ten NASDAQ assets.
 
+You can specify your own list of assets with `!run-raam assets=ASSET1,ASSET2,ASSET3...` where `ASSET1,ASSET2,ASSET3,` are the ticker abbreviations for each asset (such as `GOOG`, `AAPL`, `SPY`).
+More documentation exists for how to run the bot on the server's bot-documentation channel.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
